@@ -1,0 +1,145 @@
+﻿<Window x:Class="Project01_BatchRename.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Project01_BatchRename"
+        mc:Ignorable="d"
+        Title="Batch Rename" Height="600" Width="1000" Loaded="Window_Loaded">
+    <DockPanel>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button Name="FileExplerButton" Click="FileExplerButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Icon/file.png" Width="20" Margin="0 0 5 0"/>
+                        <Label Content="File Explorer" FontSize="15"/>
+                    </StackPanel>
+                </Button>
+                <Button Name="FolderExplerButton" Click="FolderExplerButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Icon/folder.png" Width="20" Margin="0 0 5 0"/>
+                        <Label Content="Folder Explorer" FontSize="15"/>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <DockPanel>
+                <Border Background="#D8E3E7" DockPanel.Dock="Top">
+                    <StackPanel Orientation="Horizontal"  Margin="10, 5">
+                        <Label Content="Copy to: " Margin="0,0,10,0" FontSize="15"/>
+                        <Border Background="GhostWhite" BorderBrush="Black" BorderThickness="1" CornerRadius="3,3,3,3">
+                            <TextBlock Name="CopyToTextBlock" Height="25" Width="400" Margin="5 0 0 0"
+                                       FontSize="15" VerticalAlignment="Center"/>
+                        </Border>
+                        <Button Name="browseButton" Click="browseButton_Click" Margin="20,0,0,0"
+                                BorderBrush="Black" Background="LightGray">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Icon/browse.png" Width="20" Margin="0 0 5 0"/>
+                                <Label Content="Browse" FontSize="15"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Name="clearAllButton" Click="clearAllButton_Click" Margin="20,0,0,0"
+                                BorderBrush="Black" Background="LightGray">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Icon/delete.png" Width="20" Margin="0 0 5 0"/>
+                                <Label Content="Clear all file" FontSize="15"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+                
+                <ListView Name="fileNameList">
+                    <ListView.Resources>
+                        <ContextMenu x:Key="listViewContextMenu">
+                            <MenuItem Name="deleteFile" Header="Delete" Click="deleteFile_Click">
+                                <MenuItem.Icon>
+                                    <Image Source="/Icon/delete.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </ListView.Resources>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignGridViewItem}">
+                            <Setter Property="ContextMenu" Value="{StaticResource listViewContextMenu}"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Checked" Width="auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Name="IsSelectedCheckBox" HorizontalAlignment="Center"
+                                                  Checked="IsSelectedCheckBox_Checked" Unchecked="IsSelectedCheckBox_Unchecked"
+                                                  IsChecked="{Binding IsChecked}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Type" Width="auto" DisplayMemberBinding="{Binding Type}"/>
+                            <GridViewColumn Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}"/>
+                            <GridViewColumn Header="Preview" Width="auto" DisplayMemberBinding="{Binding NameAfterChanged}"/>
+                            <GridViewColumn Header="Path" Width="auto" DisplayMemberBinding="{Binding Path}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </DockPanel>
+            <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" Background="LightGray"/>
+            <DockPanel Grid.Row="2">
+                <Grid DockPanel.Dock="Top" Background="#D8E3E7">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="310"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!--apply rule button and list of rule-->
+                    <StackPanel Orientation="Horizontal" Margin="10,5">
+                        <Button Name="applyNameRule" Content="Apply rule" Click="applyNameRule_Click" Margin="0,0,10,0"/>
+                        <Border Background="GhostWhite" BorderBrush="Black" BorderThickness="1" CornerRadius="3,3,3,3">
+                            <ComboBox Name="ruleComboBox" Width="200">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Border>
+                        <!--add rule button and delete all button-->
+                        
+                    </StackPanel>
+                    
+                    <!--save button group-->
+                    <StackPanel Grid.Column="1">
+                        
+                    </StackPanel>
+                </Grid>
+
+                <Grid DockPanel.Dock="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="310"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!--listview of rulelist, binding is missing-->
+                    <ListView Name="ruleList">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name"/>
+                                <GridViewColumn Header="Descrpition"/>
+                            </GridView>
+                        </ListView.View>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignGridViewItem}"/>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                    
+                </Grid>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
+</Window>

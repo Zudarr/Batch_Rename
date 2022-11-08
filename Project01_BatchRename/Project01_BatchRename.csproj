@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Icon\apply.png" />
+    <None Remove="Icon\browse.png" />
+    <None Remove="Icon\delete.png" />
+    <None Remove="Icon\file.png" />
+    <None Remove="Icon\folder.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignColors" Version="2.0.9" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.6.1" />
+    <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
+    <PackageReference Include="PropertyChanged.Fody" Version="4.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icon\browse.png" />
+    <Resource Include="Icon\delete.png" />
+    <Resource Include="Icon\file.png" />
+    <Resource Include="Icon\folder.png" />
+  </ItemGroup>
+
+</Project>
