@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using Contract;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,10 +30,13 @@ namespace Project01_BatchRename
         }
 
         ObservableCollection<SFile> fileList = new ObservableCollection<SFile>();
+        ObservableCollection<IRule> rulesList = new ObservableCollection<IRule>();
+        RuleFactory factory = RuleFactory.Instance();
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             fileNameList.ItemsSource = fileList;
+            ruleComboBox.ItemsSource = factory._prototypes;
         }
 
         private void FileExplerButton_Click(object sender, RoutedEventArgs e)

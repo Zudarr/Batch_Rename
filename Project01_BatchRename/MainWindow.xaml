@@ -104,7 +104,7 @@
                             <ComboBox Name="ruleComboBox" Width="200">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-
+                                        <TextBlock Margin="10 0" Text="{Binding rule.name}"/>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>

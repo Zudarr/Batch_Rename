@@ -23,6 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Contract\Contract.csproj" />
+    <ProjectReference Include="..\OneSpaceRule\OneSpaceRule.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Icon\browse.png" />
     <Resource Include="Icon\delete.png" />
     <Resource Include="Icon\file.png" />
