@@ -37,7 +37,7 @@ namespace Project01_BatchRename
                     if (type.IsClass && typeof(IRule).IsAssignableFrom(type))
                     {
                         IRule rule = (IRule)Activator.CreateInstance(type)!;
-                        _prototypes.Add(rule.name, rule);
+                        _prototypes.Add(rule.Name, rule);
                     }
                 }
             }

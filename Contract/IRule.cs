@@ -4,6 +4,8 @@
     {
         string Rename(string originName);
         IRule? Parse(string data);
-        string name { get; }
+        string Name { get; }
+        string Description { get; }
+        bool IsChecked { get; set; }
     }
 }

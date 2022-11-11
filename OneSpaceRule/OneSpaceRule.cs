@@ -5,7 +5,9 @@ namespace OneSpaceRule
 {
     public class OneSpaceRule : IRule
     {
-        public string name => "OneSpace";
+        public string Name => "One space rule";
+        public string Description => "Remove contiguous spaces, leaving only one";
+        public bool IsChecked { get; set; }
 
         public IRule? Parse(string data)
         {
@@ -15,8 +17,9 @@ namespace OneSpaceRule
         public string Rename(string originName)
         {
             const char space = ' ';
-            StringBuilder builder= new StringBuilder();
+            StringBuilder builder = new StringBuilder();
 
+            builder.Append(originName[0]);
             for (int i = 1; i < originName.Length; i++)
             {
                 char currentChar = originName[i];

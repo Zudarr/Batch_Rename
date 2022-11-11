@@ -45,13 +45,8 @@
                                 <Label Content="Browse" FontSize="15"/>
                             </StackPanel>
                         </Button>
-                        <Button Name="clearAllButton" Click="clearAllButton_Click" Margin="20,0,0,0"
-                                BorderBrush="Black" Background="LightGray">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="/Icon/delete.png" Width="20" Margin="0 0 5 0"/>
-                                <Label Content="Clear all file" FontSize="15"/>
-                            </StackPanel>
-                        </Button>
+                        <Button Name="clearCopyPathButton" Click="clearCopyPathButton_Click" Content="Clear path"
+                                Margin="20,0,0,0" BorderBrush="#AB2328" Background="#AB2328"/>
                     </StackPanel>
                 </Border>
                 
@@ -83,7 +78,7 @@
                             </GridViewColumn>
                             <GridViewColumn Header="Type" Width="auto" DisplayMemberBinding="{Binding Type}"/>
                             <GridViewColumn Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}"/>
-                            <GridViewColumn Header="Preview" Width="auto" DisplayMemberBinding="{Binding NameAfterChanged}"/>
+                            <GridViewColumn Header="Preview" Width="auto" DisplayMemberBinding="{Binding PreviewName}"/>
                             <GridViewColumn Header="Path" Width="auto" DisplayMemberBinding="{Binding Path}"/>
                         </GridView>
                     </ListView.View>
@@ -98,20 +93,25 @@
                     </Grid.ColumnDefinitions>
                     
                     <!--apply rule button and list of rule-->
-                    <StackPanel Orientation="Horizontal" Margin="10,5">
-                        <Button Name="applyNameRule" Content="Apply rule" Click="applyNameRule_Click" Margin="0,0,10,0"/>
-                        <Border Background="GhostWhite" BorderBrush="Black" BorderThickness="1" CornerRadius="3,3,3,3">
-                            <ComboBox Name="ruleComboBox" Width="200">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Margin="10 0" Text="{Binding rule.name}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </Border>
-                        <!--add rule button and delete all button-->
-                        
-                    </StackPanel>
+                    <DockPanel>
+                        <Button Name="applyNameRule" Content="Apply rule" Click="applyNameRule_Click" Margin="10,0,10,0"/>
+                        <StackPanel Orientation="Horizontal" Margin="10,5" HorizontalAlignment="Right">
+                            <Border Background="GhostWhite" BorderBrush="Black" BorderThickness="1" CornerRadius="3,3,3,3">
+                                <ComboBox Name="ruleComboBox" Width="200">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Margin="10 0" Text="{Binding Key}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </Border>
+                            <!--add rule button and delete all button-->
+                            <Button Name="addRuleToList" Content="Add rule" Click="addRuleToList_Click" Margin="10 0 10 0"/>
+                            <Button Name="clearRuleList" Content="Clear" Click="clearRuleList_Click" Margin="0 0 10 0"
+                                    BorderBrush="#AB2328" Background="#AB2328"/>
+                        </StackPanel>
+                    </DockPanel>
+                    
                     
                     <!--save button group-->
                     <StackPanel Grid.Column="1">
@@ -126,11 +126,11 @@
                     </Grid.ColumnDefinitions>
                     
                     <!--listview of rulelist, binding is missing-->
-                    <ListView Name="ruleList">
+                    <ListView Name="ruleListView">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Name"/>
-                                <GridViewColumn Header="Descrpition"/>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                                <GridViewColumn Header="Descrpition" DisplayMemberBinding="{Binding Description}"/>
                             </GridView>
                         </ListView.View>
                         <ListView.ItemContainerStyle>

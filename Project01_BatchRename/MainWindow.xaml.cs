@@ -37,6 +37,26 @@ namespace Project01_BatchRename
         {
             fileNameList.ItemsSource = fileList;
             ruleComboBox.ItemsSource = factory._prototypes;
+            ruleListView.ItemsSource = rulesList;
+        }
+
+        private void PreviewTrigger()
+        {
+            foreach(var file in fileList)
+            {
+                if (file.IsChecked)
+                {
+                    var previewName = file.Name.Trim();
+                    foreach(var rule in rulesList)
+                    {
+                        if (rule.IsChecked)
+                        {
+                            previewName = rule.Rename(previewName);
+                        }
+                    }
+                    file.PreviewName = previewName;
+                }
+            }
         }
 
         private void FileExplerButton_Click(object sender, RoutedEventArgs e)
@@ -57,7 +77,7 @@ namespace Project01_BatchRename
                         {
                             Path = Path.GetDirectoryName(fileName),
                             Name = Path.GetFileName(fileName),
-                            NameAfterChanged = Path.GetFileName(fileName),
+                            PreviewName = Path.GetFileName(fileName),
                             Type = "File",
                             IsChecked = true
                         };
@@ -65,6 +85,7 @@ namespace Project01_BatchRename
                     }
                 }
             }
+            PreviewTrigger();
         }
 
         private void FolderExplerButton_Click(object sender, RoutedEventArgs e)
@@ -86,7 +107,7 @@ namespace Project01_BatchRename
                         {
                             Path = Path.GetDirectoryName(folderName),
                             Name = Path.GetFileName(folderName),
-                            NameAfterChanged = Path.GetFileName(folderName),
+                            PreviewName = Path.GetFileName(folderName),
                             Type = "Folder",
                             IsChecked = true
                         };
@@ -94,6 +115,7 @@ namespace Project01_BatchRename
                     }
                 }
             }
+            PreviewTrigger();
         }
 
         private void deleteFile_Click(object sender, RoutedEventArgs e)
@@ -112,6 +134,7 @@ namespace Project01_BatchRename
             if (isSuccess)
             {
                 MessageBox.Show("Rename successfully");
+                fileList.Clear();
             }
         }
 
@@ -125,23 +148,33 @@ namespace Project01_BatchRename
             }
         }
 
-        private void clearAllButton_Click(object sender, RoutedEventArgs e)
+        private void clearCopyPathButton_Click(object sender, RoutedEventArgs e)
         {
-            fileList.Clear();
+            CopyToTextBlock.Text = "";
         }
 
         private void IsSelectedCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            //chưa hoàn thiện
-            var index = fileNameList.SelectedIndex;
-            fileList[index].IsChecked = true;
+            PreviewTrigger();
         }
 
         private void IsSelectedCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            //chưa hoàn thiện
-            var index = fileNameList.SelectedIndex;
-            fileList[index].IsChecked = false;
+            PreviewTrigger();
+        }
+
+        private void addRuleToList_Click(object sender, RoutedEventArgs e)
+        {
+            var element = (KeyValuePair<string, IRule>)ruleComboBox.SelectedItem;
+            var rule = element.Value;
+            rule.IsChecked = true;
+            rulesList.Add(rule);
+            PreviewTrigger();
+        }
+
+        private void clearRuleList_Click(object sender, RoutedEventArgs e)
+        {
+            rulesList.Clear();
         }
     }
 }
