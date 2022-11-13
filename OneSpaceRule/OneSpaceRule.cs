@@ -11,7 +11,11 @@ namespace OneSpaceRule
 
         public IRule? Parse(string data)
         {
-            return new OneSpaceRule();
+            if (data == Name)
+            {
+                return new OneSpaceRule();
+            }
+            return null;
         }
 
         public string Rename(string originName)

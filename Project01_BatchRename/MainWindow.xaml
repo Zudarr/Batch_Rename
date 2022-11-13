@@ -52,17 +52,13 @@
                 
                 <ListView Name="fileNameList">
                     <ListView.Resources>
-                        <ContextMenu x:Key="listViewContextMenu">
-                            <MenuItem Name="deleteFile" Header="Delete" Click="deleteFile_Click">
-                                <MenuItem.Icon>
-                                    <Image Source="/Icon/delete.png"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
+                        <ContextMenu x:Key="fileListViewContextMenu">
+                            <MenuItem Name="deleteFile" Header="Delete" Click="deleteFile_Click"/>
                         </ContextMenu>
                     </ListView.Resources>
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignGridViewItem}">
-                            <Setter Property="ContextMenu" Value="{StaticResource listViewContextMenu}"/>
+                            <Setter Property="ContextMenu" Value="{StaticResource fileListViewContextMenu}"/>
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.View>
@@ -129,12 +125,30 @@
                     <ListView Name="ruleListView">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
-                                <GridViewColumn Header="Descrpition" DisplayMemberBinding="{Binding Description}"/>
+                                <GridViewColumn Header="Checked" Width="auto">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Name="IsSelectedCheckBox" HorizontalAlignment="Center"
+                                                  Checked="IsSelectedCheckBox_Checked" Unchecked="IsSelectedCheckBox_Unchecked"
+                                                  IsChecked="{Binding IsChecked}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Name" Width="auto" DisplayMemberBinding="{Binding Name}"/>
+                                <GridViewColumn Header="Descrpition" Width="auto" DisplayMemberBinding="{Binding Description}"/>
                             </GridView>
                         </ListView.View>
+                        <ListView.Resources>
+                            <ContextMenu x:Key="ruleListViewContextMenu">
+                                <MenuItem Name="moveRuleUp" Header="Move up" Click="moveRuleUp_Click"/>
+                                <MenuItem Name="moveRuleDown" Header="Move Down" Click="moveRuleDown_Click"/>
+                                <MenuItem Name="deleteRule" Header="Delete" Click="deleteRule_Click"/>
+                            </ContextMenu>
+                        </ListView.Resources>
                         <ListView.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignGridViewItem}"/>
+                            <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignGridViewItem}">
+                                <Setter Property="ContextMenu" Value="{StaticResource ruleListViewContextMenu}"/>
+                            </Style>
                         </ListView.ItemContainerStyle>
                     </ListView>
                     

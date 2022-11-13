@@ -44,9 +44,9 @@ namespace Project01_BatchRename
         {
             foreach(var file in fileList)
             {
+                var previewName = file.Name.Trim();
                 if (file.IsChecked)
                 {
-                    var previewName = file.Name.Trim();
                     foreach(var rule in rulesList)
                     {
                         if (rule.IsChecked)
@@ -54,8 +54,8 @@ namespace Project01_BatchRename
                             previewName = rule.Rename(previewName);
                         }
                     }
-                    file.PreviewName = previewName;
                 }
+                file.PreviewName = previewName;
             }
         }
 
@@ -167,14 +167,49 @@ namespace Project01_BatchRename
         {
             var element = (KeyValuePair<string, IRule>)ruleComboBox.SelectedItem;
             var rule = element.Value;
-            rule.IsChecked = true;
-            rulesList.Add(rule);
+            if (!rulesList.Contains(rule))
+            {
+                rule.IsChecked = true;
+                rulesList.Add(rule);
+            }
             PreviewTrigger();
         }
 
         private void clearRuleList_Click(object sender, RoutedEventArgs e)
         {
             rulesList.Clear();
+            PreviewTrigger();
+        }
+
+        private void moveRuleUp_Click(object sender, RoutedEventArgs e)
+        {
+            var index = ruleListView.SelectedIndex;
+            if (index > 0)
+            {
+                var temp = rulesList[index];
+                rulesList.RemoveAt(index);
+                rulesList.Insert(index - 1, temp);
+            }
+            PreviewTrigger();
+        }
+
+        private void moveRuleDown_Click(object sender, RoutedEventArgs e)
+        {
+            var index = ruleListView.SelectedIndex;
+            if (index < rulesList.Count - 1)
+            {
+                var temp = rulesList[index];
+                rulesList.RemoveAt(index);
+                rulesList.Insert(index + 1, temp);
+            }
+            PreviewTrigger();
+        }
+
+        private void deleteRule_Click(object sender, RoutedEventArgs e)
+        {
+            var index = ruleListView.SelectedIndex;
+            rulesList.RemoveAt(index);
+            PreviewTrigger();
         }
     }
 }
