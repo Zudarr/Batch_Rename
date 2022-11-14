@@ -43,13 +43,12 @@ namespace Project01_BatchRename
             }
         }
 
-        public IRule? Parse(string input)
+        public IRule? Parse(Dictionary<string, string> input)
         {
-            var tokens = input.Split(' ');
-            var ruleName = tokens[0];
+            var ruleName = input["Name"];
             IRule? result = null;
 
-            if(_prototypes.ContainsKey(ruleName))
+            if (_prototypes.ContainsKey(ruleName))
             {
                 IRule prototype = _prototypes[ruleName];
                 result = prototype.Parse(input);

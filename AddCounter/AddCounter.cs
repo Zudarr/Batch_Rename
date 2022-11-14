@@ -10,9 +10,9 @@ namespace AddCounter
 
         public bool IsChecked { get; set; }
 
-        public IRule? Parse(string data)
+        public IRule? Parse(Dictionary<string, string> data)
         {
-            if (data == Name)
+            if (data["Name"] == Name)
             {
                 return new AddCounter();
             }

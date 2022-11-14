@@ -1,20 +1,12 @@
 ﻿using Contract;
+using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Path = System.IO.Path;
 
 namespace Project01_BatchRename
@@ -29,6 +21,7 @@ namespace Project01_BatchRename
             InitializeComponent();
         }
 
+        private string currentPresetPath = "";
         ObservableCollection<SFile> fileList = new ObservableCollection<SFile>();
         ObservableCollection<IRule> rulesList = new ObservableCollection<IRule>();
         RuleFactory factory = RuleFactory.Instance();
@@ -165,6 +158,11 @@ namespace Project01_BatchRename
 
         private void addRuleToList_Click(object sender, RoutedEventArgs e)
         {
+            if(ruleComboBox.SelectedItem == null)
+            {
+                return;
+            }
+
             var element = (KeyValuePair<string, IRule>)ruleComboBox.SelectedItem;
             var rule = element.Value;
             if (!rulesList.Contains(rule))
@@ -209,6 +207,89 @@ namespace Project01_BatchRename
         {
             var index = ruleListView.SelectedIndex;
             rulesList.RemoveAt(index);
+            PreviewTrigger();
+        }
+
+        private void savePresetAs_Click(object sender, RoutedEventArgs e)
+        {
+            if (rulesList.Count == 0)
+            {
+                return;
+            }
+
+            var saveDialog = new SaveFileDialog();
+            saveDialog.Filter = "JSON file|*.json";
+
+            if (saveDialog.ShowDialog() == true)
+            {
+                string filePath = saveDialog.FileName;
+                currentPresetPath = filePath;
+                currentPresetLabel.Content = Path.GetFileName(filePath);
+
+                var outputRuleList = new List<string>();
+
+                foreach (IRule rule in rulesList)
+                {
+                    var temp = new Dictionary<string, string>
+                    {
+                        {"Name", rule.Name },
+                    };
+                    var jsonString = JsonSerializer.Serialize(temp);
+                    outputRuleList.Add(jsonString);
+                }
+
+                File.WriteAllLines(filePath, outputRuleList);
+            }
+        }
+
+        private void savePreset_Click(object sender, RoutedEventArgs e)
+        {
+            if (rulesList.Count == 0)
+            {
+                return;
+            }
+
+            if (currentPresetPath == "")
+            {
+                savePresetAs_Click(sender, e); 
+                return;
+            }
+
+            string filePath = currentPresetPath;
+            var outputRuleList = new List<string>();
+            foreach (IRule rule in rulesList)
+            {
+                var temp = new Dictionary<string, string>
+                    {
+                        {"Name", rule.Name },
+                    };
+                var jsonString = JsonSerializer.Serialize(temp);
+                outputRuleList.Add(jsonString);
+            }
+            File.WriteAllLines(filePath, outputRuleList);
+        }
+
+        private void ChoosePresetButton_Click(object sender, RoutedEventArgs e)
+        {
+            rulesList.Clear();
+            var openDialog = new OpenFileDialog();
+            openDialog.Filter = "JSON file|*.json";
+            openDialog.Multiselect = false;
+
+            if (openDialog.ShowDialog() == true)
+            {
+                currentPresetPath = openDialog.FileName;
+                currentPresetLabel.Content = Path.GetFileName(currentPresetPath);
+                
+                var ruleInpreset = File.ReadAllLines(currentPresetPath);
+                foreach(var line in ruleInpreset)
+                {
+                    var ruleInfo = JsonSerializer.Deserialize<Dictionary<string, string>>(line);
+                    var rule = factory.Parse(ruleInfo);
+                    rule.IsChecked = true;
+                    rulesList.Add(rule);
+                }
+            }
             PreviewTrigger();
         }
     }

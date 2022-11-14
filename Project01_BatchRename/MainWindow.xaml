@@ -21,13 +21,18 @@
                         <Label Content="Folder Explorer" FontSize="15"/>
                     </StackPanel>
                 </Button>
+                <Button Name="ChoosePresetButton" Click="ChoosePresetButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Icon/choose.png" Width="20" Margin="0 0 5 0"/>
+                        <Label Content="Choose preset" FontSize="15"/>
+                    </StackPanel>
+                </Button>
             </ToolBar>
         </ToolBarTray>
 
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*"/>
-                <RowDefinition Height="5"/>
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <DockPanel>
@@ -49,7 +54,7 @@
                                 Margin="20,0,0,0" BorderBrush="#AB2328" Background="#AB2328"/>
                     </StackPanel>
                 </Border>
-                
+
                 <ListView Name="fileNameList">
                     <ListView.Resources>
                         <ContextMenu x:Key="fileListViewContextMenu">
@@ -80,8 +85,7 @@
                     </ListView.View>
                 </ListView>
             </DockPanel>
-            <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" Background="LightGray"/>
-            <DockPanel Grid.Row="2">
+            <DockPanel Grid.Row="1">
                 <Grid DockPanel.Dock="Top" Background="#D8E3E7">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -90,7 +94,9 @@
                     
                     <!--apply rule button and list of rule-->
                     <DockPanel>
-                        <Button Name="applyNameRule" Content="Apply rule" Click="applyNameRule_Click" Margin="10,0,10,0"/>
+                        <Label FontFamily="{StaticResource MaterialDesignFont}" Name="currentPresetLabel"
+                               FontSize="16" VerticalAlignment="Center">Current preset</Label>
+                        <Button Name="applyNameRule" Content="Apply rule" Click="applyNameRule_Click" Margin="10,0,0,0"/>
                         <StackPanel Orientation="Horizontal" Margin="10,5" HorizontalAlignment="Right">
                             <Border Background="GhostWhite" BorderBrush="Black" BorderThickness="1" CornerRadius="3,3,3,3">
                                 <ComboBox Name="ruleComboBox" Width="200">
@@ -110,8 +116,10 @@
                     
                     
                     <!--save button group-->
-                    <StackPanel Grid.Column="1">
-                        
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button Name="savePreset" Content="Save preset" Click="savePreset_Click"/>
+                        <Button Name="savePresetAs" Content="Save preset as" Click="savePresetAs_Click" Margin="10 0 10 0"
+                                BorderBrush="MediumBlue" Background="MediumBlue"/>
                     </StackPanel>
                 </Grid>
 
@@ -121,7 +129,7 @@
                         <ColumnDefinition Width="310"/>
                     </Grid.ColumnDefinitions>
                     
-                    <!--listview of rulelist, binding is missing-->
+                    <!--listview of rulelist-->
                     <ListView Name="ruleListView">
                         <ListView.View>
                             <GridView>

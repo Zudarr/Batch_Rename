@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Remove="Icon\apply.png" />
     <None Remove="Icon\browse.png" />
+    <None Remove="Icon\choose.png" />
     <None Remove="Icon\delete.png" />
     <None Remove="Icon\file.png" />
     <None Remove="Icon\folder.png" />
@@ -30,6 +31,7 @@
 
   <ItemGroup>
     <Resource Include="Icon\browse.png" />
+    <Resource Include="Icon\choose.png" />
     <Resource Include="Icon\delete.png" />
     <Resource Include="Icon\file.png" />
     <Resource Include="Icon\folder.png" />
