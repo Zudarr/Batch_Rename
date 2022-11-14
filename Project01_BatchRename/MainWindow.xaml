@@ -55,7 +55,7 @@
                     </StackPanel>
                 </Border>
 
-                <ListView Name="fileNameList">
+                <ListView Name="fileNameList" Drop="fileNameList_Drop" AllowDrop="True">
                     <ListView.Resources>
                         <ContextMenu x:Key="fileListViewContextMenu">
                             <MenuItem Name="deleteFile" Header="Delete" Click="deleteFile_Click"/>
@@ -130,7 +130,7 @@
                     </Grid.ColumnDefinitions>
                     
                     <!--listview of rulelist-->
-                    <ListView Name="ruleListView">
+                    <ListView Name="ruleListView" Drop="ruleListView_Drop" AllowDrop="True">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Checked" Width="auto">

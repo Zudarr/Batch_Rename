@@ -292,5 +292,54 @@ namespace Project01_BatchRename
             }
             PreviewTrigger();
         }
+
+        private void fileNameList_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                foreach (var fileName in files)
+                {
+                    var fileExist = fileList.SingleOrDefault(
+                        f => Path.GetFullPath(f.FullName) == Path.GetFullPath(fileName)
+                        );
+                    if (fileExist == null)
+                    {
+                        var newFile = new SFile()
+                        {
+                            Path = Path.GetDirectoryName(fileName),
+                            Name = Path.GetFileName(fileName),
+                            PreviewName = Path.GetFileName(fileName),
+                            Type = "File",
+                            IsChecked = true
+                        };
+                        fileList.Add(newFile);
+                    }
+                }
+            }
+            PreviewTrigger();
+        }
+
+        private void ruleListView_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                currentPresetPath = files[0];
+                currentPresetLabel.Content = Path.GetFileName(currentPresetPath);
+
+                var ruleInpreset = File.ReadAllLines(currentPresetPath);
+                foreach (var line in ruleInpreset)
+                {
+                    var ruleInfo = JsonSerializer.Deserialize<Dictionary<string, string>>(line);
+                    var rule = factory.Parse(ruleInfo);
+                    rule.IsChecked = true;
+                    rulesList.Add(rule);
+                }
+            }
+            PreviewTrigger();
+        }
     }
 }
