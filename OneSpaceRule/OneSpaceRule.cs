@@ -1,11 +1,11 @@
 ﻿using Contract;
-using System.Text;
+using System.Text.RegularExpressions;
 
 namespace OneSpaceRule
 {
     public class OneSpaceRule : IRule
     {
-        public string Name => "One space rule";
+        public string Name => "One space";
         public string Description => "Remove contiguous spaces, leaving only one";
         public bool IsChecked { get; set; }
 
@@ -20,25 +20,7 @@ namespace OneSpaceRule
 
         public string Rename(string originName)
         {
-            const char space = ' ';
-            StringBuilder builder = new StringBuilder();
-
-            builder.Append(originName[0]);
-            for (int i = 1; i < originName.Length; i++)
-            {
-                char currentChar = originName[i];
-                char previousChar = originName[i - 1];
-                if (currentChar == space && previousChar == space)
-                {
-                    //do nothing
-                }
-                else
-                {
-                    builder.Append(currentChar);
-                }
-            }
-
-            string result = builder.ToString();
+            var result = Regex.Replace(originName, @"\s+", " ");
             return result;
         }
     }

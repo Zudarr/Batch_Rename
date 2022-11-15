@@ -5,9 +5,7 @@ namespace AddCounter
     public class AddCounter : IRule
     {
         public string Name => "Add counter";
-
         public string Description => "Add counter to the end of file";
-
         public bool IsChecked { get; set; }
 
         public IRule? Parse(Dictionary<string, string> data)

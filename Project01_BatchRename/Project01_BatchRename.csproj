@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Contract\Contract.csproj" />
     <ProjectReference Include="..\OneSpaceRule\OneSpaceRule.csproj" />
+    <ProjectReference Include="..\PascalCase\PascalCase.csproj" />
     <ProjectReference Include="..\ReplaceSpaceIntoDot\ReplaceSpaceIntoDot.csproj" />
   </ItemGroup>
 
