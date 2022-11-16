@@ -5,21 +5,21 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Project01_BatchRename", "Project01_BatchRename\Project01_BatchRename.csproj", "{A705C8AB-4C73-489F-BD8C-892BE776DB93}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contract", "Contract\Contract.csproj", "{8363EA19-6D15-44FD-9A6E-1C13F193B326}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contract", "Rule\Contract\Contract.csproj", "{8363EA19-6D15-44FD-9A6E-1C13F193B326}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneSpaceRule", "OneSpaceRule\OneSpaceRule.csproj", "{C692ED2B-2B9D-4016-BDB1-784F8E03C01C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneSpaceRule", "Rule\OneSpaceRule\OneSpaceRule.csproj", "{C692ED2B-2B9D-4016-BDB1-784F8E03C01C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddCounter", "AddCounter\AddCounter.csproj", "{26FDA701-BE09-4957-8AD8-62007AE8F6CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddCounter", "Rule\AddCounter\AddCounter.csproj", "{26FDA701-BE09-4957-8AD8-62007AE8F6CE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PascalCase", "PascalCase\PascalCase.csproj", "{E60990A3-6386-4C96-BD49-1CF8D7AD2F24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PascalCase", "Rule\PascalCase\PascalCase.csproj", "{E60990A3-6386-4C96-BD49-1CF8D7AD2F24}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoveSpecialCharacters", "RemoveSpecialCharacters\RemoveSpecialCharacters.csproj", "{81D1C6F8-1970-4744-96F4-D908F1463826}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoveSpecialCharacters", "Rule\RemoveSpecialCharacters\RemoveSpecialCharacters.csproj", "{81D1C6F8-1970-4744-96F4-D908F1463826}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddPrefix", "AddPrefix\AddPrefix.csproj", "{0B5BAE8E-57C6-49B4-8CF9-E4890DE23A8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddPrefix", "Rule\AddPrefix\AddPrefix.csproj", "{0B5BAE8E-57C6-49B4-8CF9-E4890DE23A8F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddSuffix", "AddSuffix\AddSuffix.csproj", "{6B0E5761-3229-4945-839A-A373EEE51B74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddSuffix", "Rule\AddSuffix\AddSuffix.csproj", "{6B0E5761-3229-4945-839A-A373EEE51B74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChangeExtension", "ChangeExtension\ChangeExtension.csproj", "{A8835C72-B266-433F-834C-F0A443E00B4A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChangeExtension", "Rule\ChangeExtension\ChangeExtension.csproj", "{A8835C72-B266-433F-834C-F0A443E00B4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
