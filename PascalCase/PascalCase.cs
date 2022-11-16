@@ -1,5 +1,7 @@
 ﻿using Contract;
 using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace PascalCase
 {
@@ -11,20 +13,38 @@ namespace PascalCase
 
         public bool IsChecked { get; set; }
 
+        public bool IsRequireArgument => false;
+
         public IRule? Parse(Dictionary<string, string> data)
         {
             if (data["Name"] == Name)
             {
-                return new PascalCase();
+                return new PascalCase()
+                {
+                    IsChecked = true,
+                };
             }
             return null;
         }
 
         public string Rename(string originName)
         {
-            TextInfo info = CultureInfo.CurrentCulture.TextInfo;
-            var result = info.ToTitleCase(originName);
+            StringBuilder builder = new StringBuilder();
 
+            //cắt bỏ phần extension của file
+            var temp = originName.Remove(originName.LastIndexOf('.'));
+
+            //PascalCase phần còn lại
+            TextInfo info = CultureInfo.CurrentCulture.TextInfo;
+            temp = info.ToTitleCase(temp);
+            builder.Append(temp);
+
+            //nối extension vào phần đã PascalCase
+            Regex pattern = new Regex(@"\.[A-Za-z]+$");
+            var match = pattern.Match(originName);
+            builder.Append(match.ToString());
+
+            var result = builder.ToString();
             return result;
         }
     }

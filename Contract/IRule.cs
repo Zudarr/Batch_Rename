@@ -7,5 +7,6 @@
         string Name { get; }
         string Description { get; }
         bool IsChecked { get; set; }
+        bool IsRequireArgument { get; }
     }
 }

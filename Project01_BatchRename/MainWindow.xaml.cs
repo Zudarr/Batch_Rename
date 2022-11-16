@@ -21,7 +21,10 @@ namespace Project01_BatchRename
             InitializeComponent();
         }
 
-        private string currentPresetPath = "";
+        //Dict dùng để ghi lại các luật đang hiện hành và tham số của nó (nếu có)
+        //Cần cái này vì khi save preset ko thể truy cập được vào argument (nếu có) của luật
+        Dictionary<string, string> dictOfNameAndArg = new Dictionary<string, string>();
+        string currentPresetPath = "";
         ObservableCollection<SFile> fileList = new ObservableCollection<SFile>();
         ObservableCollection<IRule> rulesList = new ObservableCollection<IRule>();
         RuleFactory factory = RuleFactory.Instance();
@@ -52,7 +55,7 @@ namespace Project01_BatchRename
             }
         }
 
-        private void FileExplerButton_Click(object sender, RoutedEventArgs e)
+        private void FileExplorerButton_Click(object sender, RoutedEventArgs e)
         {
             var chooseFileScreen = new CommonOpenFileDialog();
             chooseFileScreen.Multiselect = true;
@@ -81,7 +84,7 @@ namespace Project01_BatchRename
             PreviewTrigger();
         }
 
-        private void FolderExplerButton_Click(object sender, RoutedEventArgs e)
+        private void FolderExplorerButton_Click(object sender, RoutedEventArgs e)
         {
             var chooseFolderScreen = new CommonOpenFileDialog();
             chooseFolderScreen.IsFolderPicker = true;
@@ -158,24 +161,53 @@ namespace Project01_BatchRename
 
         private void addRuleToList_Click(object sender, RoutedEventArgs e)
         {
-            if(ruleComboBox.SelectedItem == null)
+            if (ruleComboBox.SelectedItem == null)
             {
                 return;
             }
 
             var element = (KeyValuePair<string, IRule>)ruleComboBox.SelectedItem;
             var rule = element.Value;
-            if (!rulesList.Contains(rule))
+
+            foreach(var temp in rulesList)
             {
-                rule.IsChecked = true;
-                rulesList.Add(rule);
+                if (temp.Name == rule.Name)
+                {
+                    return;
+                }
             }
+
+            var argument = string.Empty;
+            if (rule.IsRequireArgument)
+            {
+                var screen = new AddArgumentWindow();
+                if (screen.ShowDialog() == true)
+                {
+                    argument = screen.NewArgument;
+                    var ruleInfo = new Dictionary<string, string>()
+                        {
+                            {"Name",rule.Name },
+                            {"Argument",argument }
+                        };
+                    rule = factory.Parse(ruleInfo);
+                }
+                else
+                {
+                    return;
+                }
+            }
+            dictOfNameAndArg.Add(rule.Name, argument);
+
+            rule.IsChecked = true;
+            rulesList.Add(rule);
+
             PreviewTrigger();
         }
 
         private void clearRuleList_Click(object sender, RoutedEventArgs e)
         {
             rulesList.Clear();
+            dictOfNameAndArg.Clear();
             PreviewTrigger();
         }
 
@@ -206,6 +238,7 @@ namespace Project01_BatchRename
         private void deleteRule_Click(object sender, RoutedEventArgs e)
         {
             var index = ruleListView.SelectedIndex;
+            dictOfNameAndArg.Remove(rulesList[index].Name);
             rulesList.RemoveAt(index);
             PreviewTrigger();
         }
@@ -227,13 +260,14 @@ namespace Project01_BatchRename
                 currentPresetLabel.Content = Path.GetFileName(filePath);
 
                 var outputRuleList = new List<string>();
-
                 foreach (IRule rule in rulesList)
                 {
                     var temp = new Dictionary<string, string>
                     {
-                        {"Name", rule.Name },
+                        { "Name", rule.Name },
+                        {"Argument", dictOfNameAndArg[rule.Name] }
                     };
+
                     var jsonString = JsonSerializer.Serialize(temp);
                     outputRuleList.Add(jsonString);
                 }
@@ -251,7 +285,7 @@ namespace Project01_BatchRename
 
             if (currentPresetPath == "")
             {
-                savePresetAs_Click(sender, e); 
+                savePresetAs_Click(sender, e);
                 return;
             }
 
@@ -260,9 +294,11 @@ namespace Project01_BatchRename
             foreach (IRule rule in rulesList)
             {
                 var temp = new Dictionary<string, string>
-                    {
-                        {"Name", rule.Name },
-                    };
+                {
+                    { "Name", rule.Name },
+                    {"Argument", dictOfNameAndArg[rule.Name] }
+                };
+
                 var jsonString = JsonSerializer.Serialize(temp);
                 outputRuleList.Add(jsonString);
             }
@@ -272,6 +308,7 @@ namespace Project01_BatchRename
         private void ChoosePresetButton_Click(object sender, RoutedEventArgs e)
         {
             rulesList.Clear();
+            dictOfNameAndArg.Clear();
             var openDialog = new OpenFileDialog();
             openDialog.Filter = "JSON file|*.json";
             openDialog.Multiselect = false;
@@ -285,8 +322,10 @@ namespace Project01_BatchRename
                 foreach(var line in ruleInpreset)
                 {
                     var ruleInfo = JsonSerializer.Deserialize<Dictionary<string, string>>(line);
+
+                    dictOfNameAndArg.Add(ruleInfo["Name"], ruleInfo["Argument"]);
+
                     var rule = factory.Parse(ruleInfo);
-                    rule.IsChecked = true;
                     rulesList.Add(rule);
                 }
             }
@@ -327,6 +366,9 @@ namespace Project01_BatchRename
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
+                rulesList.Clear();
+                dictOfNameAndArg.Clear();
+
                 currentPresetPath = files[0];
                 currentPresetLabel.Content = Path.GetFileName(currentPresetPath);
 
@@ -334,8 +376,10 @@ namespace Project01_BatchRename
                 foreach (var line in ruleInpreset)
                 {
                     var ruleInfo = JsonSerializer.Deserialize<Dictionary<string, string>>(line);
+
+                    dictOfNameAndArg.Add(ruleInfo["Name"], ruleInfo["Argument"]);
+
                     var rule = factory.Parse(ruleInfo);
-                    rule.IsChecked = true;
                     rulesList.Add(rule);
                 }
             }

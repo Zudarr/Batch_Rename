@@ -24,10 +24,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AddPrefix\AddPrefix.csproj" />
+    <ProjectReference Include="..\AddSuffix\AddSuffix.csproj" />
+    <ProjectReference Include="..\ChangeExtension\ChangeExtension.csproj" />
     <ProjectReference Include="..\Contract\Contract.csproj" />
     <ProjectReference Include="..\OneSpaceRule\OneSpaceRule.csproj" />
     <ProjectReference Include="..\PascalCase\PascalCase.csproj" />
-    <ProjectReference Include="..\ReplaceSpaceIntoDot\ReplaceSpaceIntoDot.csproj" />
+    <ProjectReference Include="..\RemoveSpecialCharacters\RemoveSpecialCharacters.csproj" />
   </ItemGroup>
 
   <ItemGroup>

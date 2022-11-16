@@ -1,22 +1,24 @@
 ﻿using Contract;
 using System.Text.RegularExpressions;
 
-namespace OneSpaceRule
+namespace ChangeExtension
 {
-    public class OneSpaceRule : IRule
+    public class ChangeExtension : IRule
     {
-        public string Name => "One space";
-        public string Description => "Remove contiguous spaces, leaving only one";
+        public string Name => "Change extension";
+        public string Description => "Change extension of the filename";
         public bool IsChecked { get; set; }
-        public bool IsRequireArgument => false;
+        public bool IsRequireArgument => true;
+        public string Extension { get; set; }
 
         public IRule? Parse(Dictionary<string, string> data)
         {
             if (data["Name"] == Name)
             {
-                return new OneSpaceRule()
+                return new ChangeExtension()
                 {
                     IsChecked = true,
+                    Extension = data["Argument"],
                 };
             }
             return null;
@@ -24,7 +26,7 @@ namespace OneSpaceRule
 
         public string Rename(string originName)
         {
-            var result = Regex.Replace(originName, @"\s+", " ");
+            var result = Regex.Replace(originName, @"\.[a-z]+$", $".{Extension}");
             return result;
         }
     }
