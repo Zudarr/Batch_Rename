@@ -1,4 +1,5 @@
 ﻿using Contract;
+using System.Text.RegularExpressions;
 
 namespace AddCounter
 {
@@ -7,12 +8,12 @@ namespace AddCounter
         public string Name => "Add counter";
         public string Description => "Add counter to the end of file";
         public bool IsChecked { get; set; }
-        public bool IsRequireArgument => true;
-        public List<string> Argument { get; set; }
+        public bool IsRequireArgument => false;
+        public int Counter { get; set; }
 
         public AddCounter()
         {
-            Argument = new List<string>();
+            Counter = 1;
         }
 
         public IRule? Parse(Dictionary<string, string> data)
@@ -26,7 +27,12 @@ namespace AddCounter
 
         public string Rename(string originName)
         {
-            throw new NotImplementedException();
+            Regex pattern = new Regex(@"\.[a-z]+$");
+            var match = pattern.Match(originName);
+
+            var result = Regex.Replace(originName, @"\.[a-z]+$", $"_{Counter}{match}");
+            Counter++;
+            return result;
         }
     }
 }

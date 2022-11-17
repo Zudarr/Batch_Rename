@@ -11,9 +11,10 @@
     <None Remove="Icon\apply.png" />
     <None Remove="Icon\browse.png" />
     <None Remove="Icon\choose.png" />
-    <None Remove="Icon\delete.png" />
+    <None Remove="Icon\down-arrow.png" />
     <None Remove="Icon\file.png" />
     <None Remove="Icon\folder.png" />
+    <None Remove="Icon\up-arrow.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Rule\AddCounter\AddCounter.csproj" />
     <ProjectReference Include="..\Rule\AddPrefix\AddPrefix.csproj" />
     <ProjectReference Include="..\Rule\AddSuffix\AddSuffix.csproj" />
     <ProjectReference Include="..\Rule\ChangeExtension\ChangeExtension.csproj" />
@@ -36,7 +38,6 @@
   <ItemGroup>
     <Resource Include="Icon\browse.png" />
     <Resource Include="Icon\choose.png" />
-    <Resource Include="Icon\delete.png" />
     <Resource Include="Icon\file.png" />
     <Resource Include="Icon\folder.png" />
   </ItemGroup>

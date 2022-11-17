@@ -29,7 +29,7 @@ namespace AddSuffix
             Regex pattern = new Regex(@"\.[a-z]+$");
             var match = pattern.Match(originName);
 
-            var result = Regex.Replace(originName, @"\.[a-z]+$", $"_SV{match}");
+            var result = Regex.Replace(originName, @"\.[a-z]+$", $"_{Suffix}{match}");
             return result;
         }
     }

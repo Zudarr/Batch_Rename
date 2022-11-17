@@ -178,27 +178,29 @@ namespace Project01_BatchRename
             }
 
             var argument = string.Empty;
+            var ruleInfo = new Dictionary<string, string>()
+            {
+                {"Name",rule.Name },
+                {"Argument",argument }
+            };
+
             if (rule.IsRequireArgument)
             {
                 var screen = new AddArgumentWindow();
                 if (screen.ShowDialog() == true)
                 {
                     argument = screen.NewArgument;
-                    var ruleInfo = new Dictionary<string, string>()
-                        {
-                            {"Name",rule.Name },
-                            {"Argument",argument }
-                        };
-                    rule = factory.Parse(ruleInfo);
+                    ruleInfo["Argument"] = argument;
                 }
                 else
                 {
                     return;
                 }
             }
+
             dictOfNameAndArg.Add(rule.Name, argument);
 
-            rule.IsChecked = true;
+            rule = factory.Parse(ruleInfo);
             rulesList.Add(rule);
 
             PreviewTrigger();
