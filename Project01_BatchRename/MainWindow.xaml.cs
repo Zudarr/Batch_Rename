@@ -1,6 +1,7 @@
 ﻿using Contract;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -55,29 +56,72 @@ namespace Project01_BatchRename
             }
         }
 
+        private List<string> DirectorySearch(string path)
+        {
+            List<string> files = new List<string>();
+            try
+            {
+                foreach (string f in Directory.GetFiles(path))
+                {
+                    files.Add(f);
+                }
+                foreach (string d in Directory.GetDirectories(path))
+                {
+                    files.AddRange(DirectorySearch(d));
+                }
+            }
+            catch (System.Exception excpt)
+            {
+                MessageBox.Show(excpt.Message);
+            }
+
+            return files;
+        }
+
         private void FileExplorerButton_Click(object sender, RoutedEventArgs e)
         {
             var chooseFileScreen = new CommonOpenFileDialog();
+            chooseFileScreen.IsFolderPicker = true;
             chooseFileScreen.Multiselect = true;
 
             if (chooseFileScreen.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 foreach (var fileName in chooseFileScreen.FileNames)
                 {
-                    var fileExist = fileList.SingleOrDefault(
+                    var nameExist = fileList.SingleOrDefault(
                         f => Path.GetFullPath(f.FullName) == Path.GetFullPath(fileName)
                         );
-                    if (fileExist == null)
+                    if (nameExist == null)
                     {
-                        var newFile = new SFile()
+                        SFile newFile;
+                        if(Directory.Exists(fileName))
                         {
-                            Path = Path.GetDirectoryName(fileName),
-                            Name = Path.GetFileName(fileName),
-                            PreviewName = Path.GetFileName(fileName),
-                            Type = "File",
-                            IsChecked = true
-                        };
-                        fileList.Add(newFile);
+                            var fileInDir = DirectorySearch(fileName);
+                            foreach(var name in fileInDir)
+                            {
+                                newFile = new SFile()
+                                {
+                                    Path = Path.GetDirectoryName(name),
+                                    Name = Path.GetFileName(name),
+                                    PreviewName = Path.GetFileName(name),
+                                    Type = "File",
+                                    IsChecked = true
+                                };
+                                fileList.Add(newFile);
+                            }
+                        }
+                        else
+                        {
+                            newFile = new SFile()
+                            {
+                                Path = Path.GetDirectoryName(fileName),
+                                Name = Path.GetFileName(fileName),
+                                PreviewName = Path.GetFileName(fileName),
+                                Type = "File",
+                                IsChecked = true
+                            };
+                            fileList.Add(newFile);
+                        }
                     }
                 }
             }
@@ -149,12 +193,7 @@ namespace Project01_BatchRename
             CopyToTextBlock.Text = "";
         }
 
-        private void IsSelectedCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            PreviewTrigger();
-        }
-
-        private void IsSelectedCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        private void IsSelectedCheckBox_CheckChanged(object sender, RoutedEventArgs e)
         {
             PreviewTrigger();
         }
@@ -352,9 +391,18 @@ namespace Project01_BatchRename
                             Path = Path.GetDirectoryName(fileName),
                             Name = Path.GetFileName(fileName),
                             PreviewName = Path.GetFileName(fileName),
-                            Type = "File",
                             IsChecked = true
                         };
+
+                        if(File.Exists(fileName))
+                        {
+                            newFile.Type = "File";
+                        }
+                        else
+                        {
+                            newFile.Type = "Folder";
+                        }
+
                         fileList.Add(newFile);
                     }
                 }

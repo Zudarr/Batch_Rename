@@ -72,7 +72,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox Name="IsSelectedCheckBox" HorizontalAlignment="Center"
-                                                  Checked="IsSelectedCheckBox_Checked" Unchecked="IsSelectedCheckBox_Unchecked"
+                                                  Checked="IsSelectedCheckBox_CheckChanged" Unchecked="IsSelectedCheckBox_CheckChanged"
                                                   IsChecked="{Binding IsChecked}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -130,7 +130,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox Name="IsSelectedCheckBox" HorizontalAlignment="Center"
-                                                  Checked="IsSelectedCheckBox_Checked" Unchecked="IsSelectedCheckBox_Unchecked"
+                                                  Checked="IsSelectedCheckBox_CheckChanged" Unchecked="IsSelectedCheckBox_CheckChanged"
                                                   IsChecked="{Binding IsChecked}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
