@@ -6,7 +6,7 @@ namespace ChangeExtension
     public class ChangeExtension : IRule
     {
         public string Name => "Change extension";
-        public string Description => "Change extension of the filename";
+        public string Description => $"Change extension of the filename to .{Extension}";
         public bool IsChecked { get; set; }
         public bool IsRequireArgument => true;
         public string Extension { get; set; }

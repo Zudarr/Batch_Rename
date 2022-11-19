@@ -6,7 +6,7 @@ namespace AddSuffix
     public class AddSuffix : IRule
     {
         public string Name => "Add suffix";
-        public string Description => "Add a string to the end of the filename";
+        public string Description => $"Add _{Suffix} to the end of the filename";
         public bool IsChecked { get; set; }
         public bool IsRequireArgument => true;
         public string Suffix { get; set; }

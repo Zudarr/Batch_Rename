@@ -5,7 +5,7 @@ namespace AddPrefix
     public class AddPrefix : IRule
     {
         public string Name => "Add prefix";
-        public string Description => "Add a string to the beginning of the filename";
+        public string Description => $"Add {Prefix}_ to the beginning of the filename";
         public bool IsChecked { get; set; }
         public bool IsRequireArgument => true;
         public string Prefix { get; set; }

@@ -1,12 +1,12 @@
 ﻿using Contract;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Windows;
 using Path = System.IO.Path;
 
@@ -51,6 +51,20 @@ namespace Project01_BatchRename
                             previewName = rule.Rename(previewName);
                         }
                     }
+
+                    if (previewName.Length > 255)
+                    {
+                        MessageBox.Show($"ERROR: Length of {previewName} exceed 255 characters");
+                        continue;
+                    }
+
+                    Regex pattern = new Regex(@"[<>:/\\?*|""]");
+                    var match = pattern.Match(previewName);
+                    if(match.Success)
+                    {
+                        MessageBox.Show($"ERROR: {previewName} contains {match} characters");
+                        continue;
+                    }
                 }
                 file.PreviewName = previewName;
             }
@@ -81,7 +95,6 @@ namespace Project01_BatchRename
         private void FileExplorerButton_Click(object sender, RoutedEventArgs e)
         {
             var chooseFileScreen = new CommonOpenFileDialog();
-            chooseFileScreen.IsFolderPicker = true;
             chooseFileScreen.Multiselect = true;
 
             if (chooseFileScreen.ShowDialog() == CommonFileDialogResult.Ok)
@@ -93,30 +106,45 @@ namespace Project01_BatchRename
                         );
                     if (nameExist == null)
                     {
-                        SFile newFile;
-                        if(Directory.Exists(fileName))
+                        var newFile = new SFile()
                         {
-                            var fileInDir = DirectorySearch(fileName);
-                            foreach(var name in fileInDir)
-                            {
-                                newFile = new SFile()
-                                {
-                                    Path = Path.GetDirectoryName(name),
-                                    Name = Path.GetFileName(name),
-                                    PreviewName = Path.GetFileName(name),
-                                    Type = "File",
-                                    IsChecked = true
-                                };
-                                fileList.Add(newFile);
-                            }
-                        }
-                        else
+                            Path = Path.GetDirectoryName(fileName),
+                            Name = Path.GetFileName(fileName),
+                            PreviewName = Path.GetFileName(fileName),
+                            Type = "File",
+                            IsChecked = true
+                        };
+                        fileList.Add(newFile);
+                    }
+                }
+            }
+            PreviewTrigger();
+        }
+
+        private void FileFromFolderExplorerButton_Click(object sender, RoutedEventArgs e)
+        {
+            var chooseFileScreen = new CommonOpenFileDialog();
+            chooseFileScreen.IsFolderPicker = true;
+            chooseFileScreen.Multiselect = true;
+
+            if (chooseFileScreen.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                foreach (var fileName in chooseFileScreen.FileNames)
+                {
+                    var fileInDir = DirectorySearch(fileName);
+                    foreach (var name in fileInDir)
+                    {
+                        var nameExist = fileList.SingleOrDefault(
+                            f => Path.GetFullPath(f.FullName) == Path.GetFullPath(name)
+                        );
+
+                        if (nameExist == null)
                         {
-                            newFile = new SFile()
+                            var newFile = new SFile()
                             {
-                                Path = Path.GetDirectoryName(fileName),
-                                Name = Path.GetFileName(fileName),
-                                PreviewName = Path.GetFileName(fileName),
+                                Path = Path.GetDirectoryName(name),
+                                Name = Path.GetFileName(name),
+                                PreviewName = Path.GetFileName(name),
                                 Type = "File",
                                 IsChecked = true
                             };

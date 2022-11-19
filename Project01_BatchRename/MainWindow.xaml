@@ -12,13 +12,19 @@
                 <Button Name="FileExplorerButton" Click="FileExplorerButton_Click">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Icon/file.png" Width="20" Margin="0 0 5 0"/>
-                        <Label Content="File Explorer" FontSize="15"/>
+                        <Label Content="File explorer" FontSize="15"/>
+                    </StackPanel>
+                </Button>
+                <Button Name="FileFromFolderExplorerButton" Click="FileFromFolderExplorerButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Icon/file.png" Width="20" Margin="0 0 5 0"/>
+                        <Label Content="Get all file from chosen folder" FontSize="15"/>
                     </StackPanel>
                 </Button>
                 <Button Name="FolderExplorerButton" Click="FolderExplorerButton_Click">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Icon/folder.png" Width="20" Margin="0 0 5 0"/>
-                        <Label Content="Folder Explorer" FontSize="15"/>
+                        <Label Content="Folder explorer" FontSize="15"/>
                     </StackPanel>
                 </Button>
                 <Button Name="ChoosePresetButton" Click="ChoosePresetButton_Click">
