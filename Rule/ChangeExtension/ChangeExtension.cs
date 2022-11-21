@@ -6,10 +6,15 @@ namespace ChangeExtension
     public class ChangeExtension : IRule
     {
         public string Name => "Change extension";
-        public string Description => $"Change extension of the filename to .{Extension}";
+        public string Description => $"Change extension of the filename to .{Argument}";
         public bool IsChecked { get; set; }
         public bool IsRequireArgument => true;
-        public string Extension { get; set; }
+        public string Argument { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
 
         public IRule? Parse(Dictionary<string, string> data)
         {
@@ -18,15 +23,15 @@ namespace ChangeExtension
                 return new ChangeExtension()
                 {
                     IsChecked = true,
-                    Extension = data["Argument"],
+                    Argument = data["Argument"],
                 };
             }
             return null;
         }
 
         public string Rename(string originName)
-        {
-            var result = Regex.Replace(originName, @"\.[a-z]+$", $".{Extension}");
+        {   //regex khớp với extension của file (đuôi file)
+            var result = Regex.Replace(originName, @"\.[a-z]+$", $".{Argument}");
             return result;
         }
     }

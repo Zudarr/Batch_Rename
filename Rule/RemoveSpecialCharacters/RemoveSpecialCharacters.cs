@@ -9,27 +9,22 @@ namespace RemoveSpecialCharacters
         public string Description => "Remove some special character given in advance";
         public bool IsChecked { get; set; }
         public bool IsRequireArgument => true;
-        public List<string> Argument { get; set; }
+        public string Argument { get; set; }
 
-        public RemoveSpecialCharacters()
+        public object Clone()
         {
-            Argument = new List<string>();
+            return MemberwiseClone();
         }
 
         public IRule? Parse(Dictionary<string, string> data)
         {
             if (data["Name"] == Name)
             {
-                var tokens = data["Argument"].Split(", ", StringSplitOptions.None);
                 var result = new RemoveSpecialCharacters()
                 {
                     IsChecked = true,
+                    Argument = data["Argument"]
                 };
-
-                foreach (var token in tokens)
-                {
-                    result.Argument.Add(token);
-                }
 
                 return result;
             }
@@ -40,11 +35,13 @@ namespace RemoveSpecialCharacters
         {
             StringBuilder builder = new StringBuilder();
 
+            var SpecialChar = Argument.Split(", ", StringSplitOptions.None);
+
             foreach (var character in originName)
             {
-                if (Argument.Contains(character.ToString()))
+                if (SpecialChar.Contains(character.ToString()))
                 {
-                    builder.Append(' ');
+                    builder.Append(string.Empty);
                 }
                 else
                 {

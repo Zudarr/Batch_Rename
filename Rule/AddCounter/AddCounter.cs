@@ -9,18 +9,20 @@ namespace AddCounter
         public string Description => "Add counter to the end of file";
         public bool IsChecked { get; set; }
         public bool IsRequireArgument => false;
+        public string Argument { get; set; }
         public int Counter { get; set; }
 
-        public AddCounter()
-        {
-            Counter = 1;
-        }
 
         public IRule? Parse(Dictionary<string, string> data)
         {
             if (data["Name"] == Name)
             {
-                return new AddCounter();
+                return new AddCounter()
+                {
+                    IsChecked = true,
+                    Argument = "",
+                    Counter = 1,
+                };
             }
             return null;
         }
@@ -33,6 +35,11 @@ namespace AddCounter
             var result = Regex.Replace(originName, @"\.[a-z]+$", $"_{Counter}{match}");
             Counter++;
             return result;
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 }

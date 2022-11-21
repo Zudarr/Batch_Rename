@@ -5,10 +5,15 @@ namespace AddPrefix
     public class AddPrefix : IRule
     {
         public string Name => "Add prefix";
-        public string Description => $"Add {Prefix}_ to the beginning of the filename";
+        public string Description => $"Add {Argument}_ to the beginning of the filename";
         public bool IsChecked { get; set; }
         public bool IsRequireArgument => true;
-        public string Prefix { get; set; }
+        public string Argument { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
 
         public IRule? Parse(Dictionary<string, string> data)
         {
@@ -17,7 +22,7 @@ namespace AddPrefix
                 return new AddPrefix()
                 {
                     IsChecked = true,
-                    Prefix = data["Argument"],
+                    Argument = data["Argument"],
                 };
             }
             return null;
@@ -25,7 +30,7 @@ namespace AddPrefix
 
         public string Rename(string originName)
         {
-            return $"{Prefix}_{originName}";
+            return $"{Argument}_{originName}";
         }
     }
 }

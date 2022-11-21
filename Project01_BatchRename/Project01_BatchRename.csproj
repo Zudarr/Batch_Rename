@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Rule\AddCounter\AddCounter.csproj" />
     <ProjectReference Include="..\Rule\AddPrefix\AddPrefix.csproj" />
     <ProjectReference Include="..\Rule\AddSuffix\AddSuffix.csproj" />
     <ProjectReference Include="..\Rule\ChangeExtension\ChangeExtension.csproj" />

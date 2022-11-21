@@ -61,9 +61,11 @@
                     </StackPanel>
                 </Border>
 
-                <ListView Name="fileNameList" Drop="fileNameList_Drop" AllowDrop="True">
+                <ListView Name="fileListView" Drop="fileListView_Drop" AllowDrop="True">
                     <ListView.Resources>
                         <ContextMenu x:Key="fileListViewContextMenu">
+                            <MenuItem Name="moveFileUp" Header="Move up" Click="moveFileUp_Click"/>
+                            <MenuItem Name="moveFileDown" Header="Move Down" Click="moveFileDown_Click"/>
                             <MenuItem Name="deleteFile" Header="Delete" Click="deleteFile_Click"/>
                         </ContextMenu>
                     </ListView.Resources>

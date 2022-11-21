@@ -9,6 +9,12 @@ namespace OneSpaceRule
         public string Description => "Remove contiguous spaces, leaving only one";
         public bool IsChecked { get; set; }
         public bool IsRequireArgument => false;
+        public string Argument { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
 
         public IRule? Parse(Dictionary<string, string> data)
         {
@@ -17,6 +23,7 @@ namespace OneSpaceRule
                 return new OneSpaceRule()
                 {
                     IsChecked = true,
+                    Argument = "",
                 };
             }
             return null;
@@ -24,7 +31,7 @@ namespace OneSpaceRule
 
         public string Rename(string originName)
         {
-            var result = Regex.Replace(originName, @"\s+", " ");
+            var result = Regex.Replace(originName, @"\s+", " "); // regex khớp với từ 2 khoảng trắng liên tiếp trở lên
             return result;
         }
     }

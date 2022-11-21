@@ -22,29 +22,33 @@ namespace Project01_BatchRename
             InitializeComponent();
         }
 
-        //Dict dùng để ghi lại các luật đang hiện hành và tham số của nó (nếu có)
-        //Cần cái này vì khi save preset ko thể truy cập được vào argument (nếu có) của luật
-        Dictionary<string, string> dictOfNameAndArg = new Dictionary<string, string>();
-        string currentPresetPath = "";
+        string currentPresetPath = ""; // biến lưu đường dẫn của preset hiện hành
         ObservableCollection<SFile> fileList = new ObservableCollection<SFile>();
         ObservableCollection<IRule> rulesList = new ObservableCollection<IRule>();
         RuleFactory factory = RuleFactory.Instance();
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            fileNameList.ItemsSource = fileList;
+            fileListView.ItemsSource = fileList;
             ruleComboBox.ItemsSource = factory._prototypes;
             ruleListView.ItemsSource = rulesList;
         }
 
-        private void PreviewTrigger()
+        private void PreviewTrigger() // mỗi khi có thay đổi trong danh sách file hoặc danh sách luật thì gọi hàm
+                                      // này để áp các luật đổi tên lên danh sách file
         {
-            foreach(var file in fileList)
+            List<IRule> tempRuleList = new List<IRule>();
+            foreach(var rule in rulesList)
+            {
+                tempRuleList.Add((IRule)rule.Clone());
+            }
+
+            foreach (var file in fileList)
             {
                 var previewName = file.Name.Trim();
                 if (file.IsChecked)
                 {
-                    foreach(var rule in rulesList)
+                    foreach(var rule in tempRuleList)
                     {
                         if (rule.IsChecked)
                         {
@@ -186,9 +190,32 @@ namespace Project01_BatchRename
             PreviewTrigger();
         }
 
+        private void ChoosePresetButton_Click(object sender, RoutedEventArgs e)
+        {
+            rulesList.Clear();
+            var openDialog = new OpenFileDialog();
+            openDialog.Filter = "JSON file|*.json";
+            openDialog.Multiselect = false;
+
+            if (openDialog.ShowDialog() == true)
+            {
+                currentPresetPath = openDialog.FileName;
+                currentPresetLabel.Content = Path.GetFileName(currentPresetPath);
+
+                var ruleInpreset = File.ReadAllLines(currentPresetPath);
+                foreach (var line in ruleInpreset)
+                {
+                    var ruleInfo = JsonSerializer.Deserialize<Dictionary<string, string>>(line);
+                    var rule = factory.Parse(ruleInfo);
+                    rulesList.Add(rule);
+                }
+            }
+            PreviewTrigger();
+        }
+
         private void deleteFile_Click(object sender, RoutedEventArgs e)
         {
-            int index = fileNameList.SelectedIndex;
+            int index = fileListView.SelectedIndex;
             fileList.RemoveAt(index);
         }
 
@@ -233,9 +260,11 @@ namespace Project01_BatchRename
                 return;
             }
 
+            //ép kiểu item trong combobox để sử dụng
             var element = (KeyValuePair<string, IRule>)ruleComboBox.SelectedItem;
-            var rule = element.Value;
+            var rule = (IRule)element.Value.Clone();
 
+            //kiểm tra xem luật đã tồn tại trong danh sách hiện hành chưa
             foreach(var temp in rulesList)
             {
                 if (temp.Name == rule.Name)
@@ -244,6 +273,7 @@ namespace Project01_BatchRename
                 }
             }
 
+            //tạo dict lưu tên luật và tham số của nó
             var argument = string.Empty;
             var ruleInfo = new Dictionary<string, string>()
             {
@@ -251,6 +281,7 @@ namespace Project01_BatchRename
                 {"Argument",argument }
             };
 
+            //nếu luật yêu cầu tham số thì tạo cửa sổ cho ng dùng nhập vào
             if (rule.IsRequireArgument)
             {
                 var screen = new AddArgumentWindow();
@@ -265,8 +296,6 @@ namespace Project01_BatchRename
                 }
             }
 
-            dictOfNameAndArg.Add(rule.Name, argument);
-
             rule = factory.Parse(ruleInfo);
             rulesList.Add(rule);
 
@@ -276,7 +305,6 @@ namespace Project01_BatchRename
         private void clearRuleList_Click(object sender, RoutedEventArgs e)
         {
             rulesList.Clear();
-            dictOfNameAndArg.Clear();
             PreviewTrigger();
         }
 
@@ -286,8 +314,8 @@ namespace Project01_BatchRename
             if (index > 0)
             {
                 var temp = rulesList[index];
-                rulesList.RemoveAt(index);
-                rulesList.Insert(index - 1, temp);
+                rulesList.RemoveAt(index); //xóa tại vị trí chỉ định
+                rulesList.Insert(index - 1, temp); //chèn vào vị trí trước đó
             }
             PreviewTrigger();
         }
@@ -304,10 +332,33 @@ namespace Project01_BatchRename
             PreviewTrigger();
         }
 
+        private void moveFileUp_Click(object sender, RoutedEventArgs e)
+        {
+            var index = fileListView.SelectedIndex;
+            if (index > 0)
+            {
+                var temp = fileList[index];
+                fileList.RemoveAt(index); //xóa tại vị trí chỉ định
+                fileList.Insert(index - 1, temp); //chèn vào vị trí trước đó
+            }
+            PreviewTrigger();
+        }
+
+        private void moveFileDown_Click(object sender, RoutedEventArgs e)
+        {
+            var index = fileListView.SelectedIndex;
+            if (index > 0)
+            {
+                var temp = fileList[index];
+                fileList.RemoveAt(index); //xóa tại vị trí chỉ định
+                fileList.Insert(index - 1, temp); //chèn vào vị trí trước đó
+            }
+            PreviewTrigger();
+        }
+
         private void deleteRule_Click(object sender, RoutedEventArgs e)
         {
             var index = ruleListView.SelectedIndex;
-            dictOfNameAndArg.Remove(rulesList[index].Name);
             rulesList.RemoveAt(index);
             PreviewTrigger();
         }
@@ -334,7 +385,7 @@ namespace Project01_BatchRename
                     var temp = new Dictionary<string, string>
                     {
                         { "Name", rule.Name },
-                        {"Argument", dictOfNameAndArg[rule.Name] }
+                        {"Argument", rule.Argument }
                     };
 
                     var jsonString = JsonSerializer.Serialize(temp);
@@ -365,7 +416,7 @@ namespace Project01_BatchRename
                 var temp = new Dictionary<string, string>
                 {
                     { "Name", rule.Name },
-                    {"Argument", dictOfNameAndArg[rule.Name] }
+                    {"Argument", rule.Argument }
                 };
 
                 var jsonString = JsonSerializer.Serialize(temp);
@@ -374,34 +425,7 @@ namespace Project01_BatchRename
             File.WriteAllLines(filePath, outputRuleList);
         }
 
-        private void ChoosePresetButton_Click(object sender, RoutedEventArgs e)
-        {
-            rulesList.Clear();
-            dictOfNameAndArg.Clear();
-            var openDialog = new OpenFileDialog();
-            openDialog.Filter = "JSON file|*.json";
-            openDialog.Multiselect = false;
-
-            if (openDialog.ShowDialog() == true)
-            {
-                currentPresetPath = openDialog.FileName;
-                currentPresetLabel.Content = Path.GetFileName(currentPresetPath);
-                
-                var ruleInpreset = File.ReadAllLines(currentPresetPath);
-                foreach(var line in ruleInpreset)
-                {
-                    var ruleInfo = JsonSerializer.Deserialize<Dictionary<string, string>>(line);
-
-                    dictOfNameAndArg.Add(ruleInfo["Name"], ruleInfo["Argument"]);
-
-                    var rule = factory.Parse(ruleInfo);
-                    rulesList.Add(rule);
-                }
-            }
-            PreviewTrigger();
-        }
-
-        private void fileNameList_Drop(object sender, DragEventArgs e)
+        private void fileListView_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -445,7 +469,6 @@ namespace Project01_BatchRename
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
                 rulesList.Clear();
-                dictOfNameAndArg.Clear();
 
                 currentPresetPath = files[0];
                 currentPresetLabel.Content = Path.GetFileName(currentPresetPath);
@@ -454,8 +477,6 @@ namespace Project01_BatchRename
                 foreach (var line in ruleInpreset)
                 {
                     var ruleInfo = JsonSerializer.Deserialize<Dictionary<string, string>>(line);
-
-                    dictOfNameAndArg.Add(ruleInfo["Name"], ruleInfo["Argument"]);
 
                     var rule = factory.Parse(ruleInfo);
                     rulesList.Add(rule);

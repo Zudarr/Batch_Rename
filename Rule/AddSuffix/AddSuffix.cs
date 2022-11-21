@@ -6,10 +6,15 @@ namespace AddSuffix
     public class AddSuffix : IRule
     {
         public string Name => "Add suffix";
-        public string Description => $"Add _{Suffix} to the end of the filename";
+        public string Description => $"Add _{Argument} to the end of the filename";
         public bool IsChecked { get; set; }
         public bool IsRequireArgument => true;
-        public string Suffix { get; set; }
+        public string Argument { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
 
         public IRule? Parse(Dictionary<string, string> data)
         {
@@ -18,7 +23,7 @@ namespace AddSuffix
                 return new AddSuffix()
                 {
                     IsChecked = true,
-                    Suffix = data["Argument"],
+                    Argument = data["Argument"],
                 };
             }
             return null;
@@ -29,7 +34,7 @@ namespace AddSuffix
             Regex pattern = new Regex(@"\.[a-z]+$");
             var match = pattern.Match(originName);
 
-            var result = Regex.Replace(originName, @"\.[a-z]+$", $"_{Suffix}{match}");
+            var result = Regex.Replace(originName, @"\.[a-z]+$", $"_{Argument}{match}");
             return result;
         }
     }
