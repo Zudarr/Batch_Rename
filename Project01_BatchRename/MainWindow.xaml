@@ -58,6 +58,8 @@
                         </Button>
                         <Button Name="clearCopyPathButton" Click="clearCopyPathButton_Click" Content="Clear path"
                                 Margin="20,0,0,0" BorderBrush="#AB2328" Background="#AB2328"/>
+                        <Button Name="deleteAllFilesButton" Click="deleteAllFilesButton_Click" Content="Clear file list"
+                                Margin="115,0,0,0" BorderBrush="#AB2328" Background="#AB2328"/>
                     </StackPanel>
                 </Border>
 

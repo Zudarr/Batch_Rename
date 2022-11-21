@@ -248,6 +248,11 @@ namespace Project01_BatchRename
             CopyToTextBlock.Text = "";
         }
 
+        private void deleteAllFilesButton_Click(object sender, RoutedEventArgs e)
+        {
+            fileList.Clear();
+        }
+
         private void IsSelectedCheckBox_CheckChanged(object sender, RoutedEventArgs e)
         {
             PreviewTrigger();
@@ -484,5 +489,7 @@ namespace Project01_BatchRename
             }
             PreviewTrigger();
         }
+
+        
     }
 }
